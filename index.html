@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+
+        <form >
+            <input type="text" id="input" placeholder="Número">
+            <button type="button" onclick="predecir(event)">Predecir</button>
+        </form>
+    </div>
+        <h1 id="output" style="color:red">Caregando</h1>
+    <img src="activacionneuronal.gif" style="width: 10%; height: auto; " class="mono" hidden alt="" srcset="">
+</body>
+<style>
+    body{
+        display:flex;
+        flex-direction: column;
+        align-content: center;
+        background-color: pink;
+        /* background-color: rgb(133, 198, 133); */
+        justify-content: center;
+        align-items: center;
+    }
+    input{
+        display: flex;
+        /* background-color: black; */
+        /* color:white; */
+        outline: none;
+
+    }
+    button{
+        display:flex;
+        width: 10vh;
+        margin:10px;
+        text-align: center;
+        height: auto;
+        background-color: blueviolet;
+        align-content: center;
+        color: white;
+        border: 0;
+        border-radius: 4px;
+        justify-self: center;
+        /* LE QUIERO ROBAR EL LABURO A SELE */
+    }
+</style>
+<script>
+    const model = tf.sequential()
+    const predecir = async(e) =>{
+        e.preventDefault()
+        const numero = parseInt(document.querySelector("#input").value)
+        const prediccion = await model.predict(tf.tensor2d([numero],[1,1]))
+        document.querySelector("#output").innerText = await prediccion    
+        document.querySelector(".mono").removeAttribute("hidden")
+    }
+    async function aprendeLinear(){
+
+        model.add(tf.layers.dense({units:1,inputShape:[1]}))
+        // acá dice que si tenés 2 porquerías le pasas al model.add
+        // el chabon aprende nsq
+        model.compile({
+            loss: "meanSquaredError",
+            optimizer: 'sgd'
+        })
+        console.log("llegué hasta acá")
+// -------------->>> CHI <<<-----------------
+        const xs = tf.tensor2d([-6,-5,-4,-3,-2,-1,0,1,2],[9,1]) //<--- Esto es lo que le pasas
+        // y = 2x+6 <---- La función esta 
+        const ys = tf.tensor2d([-6,-4,-2,0,2,4,6,8,10],[9,1]) //<--- acá van las respuestas
+        await model.fit(xs, ys, {epochs:350}) 
+// FUNCIÓN ADENTRO DE FUNCIÓN PAPÁ
+        
+// todas putas ESHA ME SHAMA ME SHAMA
+        document.querySelector("#output").innerText = "Tamo ready"
+        document.querySelector("#output").style = "color:green; width:10vh"
+    }
+    aprendeLinear()
+</script>
+</html>
