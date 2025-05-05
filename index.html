@@ -8,9 +8,10 @@
 </head>
 <body>
     <div>
-
+        <h1>TensorFlow</h1>
         <form >
             <input type="text" id="input" placeholder="Número">
+            <h3>Predecir (y = 2x+6)  </h3>
             <button type="button" onclick="predecir(event)">Predecir</button>
         </form>
     </div>
@@ -61,21 +62,15 @@
     async function aprendeLinear(){
 
         model.add(tf.layers.dense({units:1,inputShape:[1]}))
-        // acá dice que si tenés 2 porquerías le pasas al model.add
-        // el chabon aprende nsq
         model.compile({
             loss: "meanSquaredError",
             optimizer: 'sgd'
         })
         console.log("llegué hasta acá")
-// -------------->>> CHI <<<-----------------
-        const xs = tf.tensor2d([-6,-5,-4,-3,-2,-1,0,1,2],[9,1]) //<--- Esto es lo que le pasas
-        // y = 2x+6 <---- La función esta 
-        const ys = tf.tensor2d([-6,-4,-2,0,2,4,6,8,10],[9,1]) //<--- acá van las respuestas
+        const xs = tf.tensor2d([-6,-5,-4,-3,-2,-1,0,1,2],[9,1]) 
+        const ys = tf.tensor2d([-6,-4,-2,0,2,4,6,8,10],[9,1]) 
         await model.fit(xs, ys, {epochs:350}) 
-// FUNCIÓN ADENTRO DE FUNCIÓN PAPÁ
         
-// todas putas ESHA ME SHAMA ME SHAMA
         document.querySelector("#output").innerText = "Tamo ready"
         document.querySelector("#output").style = "color:green; width:10vh"
     }
