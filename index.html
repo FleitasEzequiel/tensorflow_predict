@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
@@ -16,7 +18,11 @@
         </form>
     </div>
         <h1 id="output" style="color:red">Caregando</h1>
-    <img src="activacionneuronal.gif" style="width: 10%; height: auto; " class="mono" hidden alt="" srcset="">
+        <img src="activacionneuronal.gif" style="width: 10%; height: auto; " class="mono" hidden alt="" srcset="">
+        <p id="perdida"></p>
+        <div style="width: 800px;">
+            <canvas id="loss"></canvas>
+        </div>
 </body>
 <style>
     body{
@@ -69,10 +75,29 @@
         console.log("llegué hasta acá")
         const xs = tf.tensor2d([-6,-5,-4,-3,-2,-1,0,1,2],[9,1]) 
         const ys = tf.tensor2d([-6,-4,-2,0,2,4,6,8,10],[9,1]) 
-        await model.fit(xs, ys, {epochs:350}) 
-        
+        const {epoch, history} = await model.fit(xs, ys, {epochs:350})
+const data = {
+  labels: await epoch,
+  datasets: [{
+    label: 'Pérdida (loss)',
+    data: await history.loss,
+    fill: false,
+    borderColor: 'rgb(75, 192, 192)',
+    tension: 0.1
+  }]
+};
+
+new Chart(
+    document.getElementById('loss'),
+    {
+      type: 'line',
+      data
+    }
+  );
+        document.querySelector("#loss").innerText = "Tamo ready"
         document.querySelector("#output").innerText = "Tamo ready"
         document.querySelector("#output").style = "color:green; width:10vh"
+        document.querySelector("#perdida").innerText = `Pérdida Inicial : ${(history.loss[0]).toFixed(4)} - Pérdida Final: ${(history.loss[349]).toFixed(4)}`
     }
     aprendeLinear()
 </script>
